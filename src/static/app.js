@@ -17,6 +17,12 @@ document.addEventListener("DOMContentLoaded", () => {
     return node;
   }
 
+  // Helper: stable DOM id for an activity card (avoid CSS.escape id mismatches)
+  function activityCardId(name) {
+    // encodeURIComponent produces a safe id for use in getElementById
+    return `card-${encodeURIComponent(name)}`;
+  }
+
   // Create avatar initials from email
   function initialsFromEmail(email) {
     if (!email) return "?";
@@ -38,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Render a single activity card with participants list
   function renderActivityCard(name, data) {
-    const card = el("div", { class: "activity-card", id: `card-${CSS.escape(name)}` });
+    const card = el("div", { class: "activity-card", id: activityCardId(name) });
 
     const title = el("h4", { text: name });
     const desc = el("p", { text: data.description });
@@ -134,7 +140,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Update participants UI for one activity (append participant)
   function appendParticipantToCard(activityName, email) {
-    const card = document.getElementById(`card-${CSS.escape(activityName)}`);
+    const card = document.getElementById(activityCardId(activityName));
+    // return false if the card isn't present so callers can refresh the list
+    if (!card) return false;
     if (!card) return;
     const section = card.querySelector(".participants-section");
     // remove empty message if present
@@ -203,6 +211,8 @@ document.addEventListener("DOMContentLoaded", () => {
     // update count
     const countEl = section.querySelector(".participants-count");
     if (countEl) countEl.textContent = String(Number(countEl.textContent || 0) + 1);
+
+    return true;
   }
 
   // Sign up handler
@@ -220,8 +230,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch(url, { method: "POST" });
       const result = await res.json();
       if (!res.ok) throw new Error(result.detail || "Signup failed");
-      // UI update
-      appendParticipantToCard(selected, email);
+      // UI update: if the card isn't in the DOM (for example different view), reload activities
+      const updated = appendParticipantToCard(selected, email);
+      if (!updated) await loadActivities();
       showMessage(`Signed up ${email} for ${selected}`, "success");
       emailInput.value = "";
     } catch (err) {
