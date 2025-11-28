@@ -45,3 +45,40 @@ def test_signup_prevents_overbooking():
 
     # cleanup
     del activities[name]
+
+
+def test_unregister_participant():
+    name = "Test Unregister Club"
+    # start with two participants
+    activities[name] = {
+        "description": "",
+        "schedule": "",
+        "max_participants": 5,
+        "participants": ["rem@mergington.edu", "stay@mergington.edu"]
+    }
+
+    # unregister one participant
+    r = client.delete(f"/activities/{name}/participants?email=rem%40mergington.edu")
+    assert r.status_code == 200
+    assert any(p == "rem@mergington.edu" for p in activities[name]["participants"]) is False
+    assert "unregistered" in r.json().get("message", "").lower()
+
+    # cleanup
+    del activities[name]
+
+
+def test_unregister_nonexistent_participant():
+    name = "Test Unregister Missing"
+    activities[name] = {
+        "description": "",
+        "schedule": "",
+        "max_participants": 5,
+        "participants": []
+    }
+
+    r = client.delete(f"/activities/{name}/participants?email=ghost%40mergington.edu")
+    assert r.status_code == 404
+    assert "not found" in r.json().get("detail", "").lower()
+
+    # cleanup
+    del activities[name]
