@@ -142,3 +142,104 @@ footer {
   padding: 20px;
   color: #666;
 }
+
+/* Participants list styling */
+.participants-section {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed #eee;
+}
+
+.participants-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  gap: 12px;
+}
+
+.participants-count {
+  font-size: 13px;
+  color: #555;
+  background: #eef2ff;
+  border: 1px solid #dbe6ff;
+  padding: 4px 8px;
+  border-radius: 999px;
+}
+
+.participants-list {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #ffffff, #fbfbff);
+  border: 1px solid #f0f2ff;
+  box-shadow: 0 1px 0 rgba(10, 10, 30, 0.02);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  font-size: 14px;
+  flex: 0 0 36px;
+  background: linear-gradient(135deg, #5b6ef8 0%, #00c6ff 100%);
+}
+
+.participant-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* delete button for participants */
+.participant-delete {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: #b00020;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+.participant-delete:hover {
+  background: rgba(176,0,32,0.06);
+  color: #7f0014;
+}
+
+.participant-email {
+  font-size: 13px;
+  color: #333;
+}
+
+.participant-extra {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Small helper for empty list */
+.participants-empty {
+  font-size: 13px;
+  color: #666;
+  padding: 8px;
+  border-radius: 6px;
+  background: #f7f9fc;
+  border: 1px dashed #e3e9f7;
+}
